@@ -1,0 +1,50 @@
+/* Ionic base */
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/* Inter — only the weights we use (400 body, 500 meta, 600 links, 700 heavy) */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+:root {
+  --glass-text: #1a1a2e;
+  --glass-text-sec: rgba(26, 26, 46, 0.55);
+  --glass-accent: oklch(0.68 0.16 170);
+  --glass-danger: oklch(0.65 0.22 25);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html.glass-dark {
+  --glass-text: #ffffff;
+  --glass-text-sec: rgba(255, 255, 255, 0.6);
+}
+
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--glass-text);
+  background: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ion-app, ion-router-outlet {
+  background: transparent !important;
+}
+
+ion-content {
+  --background: transparent;
+  color: var(--glass-text);
+}
+
+/* Hide fully-hidden pages so they don't bleed through during transitions */
+ion-router-outlet > .ion-page.ion-page-hidden {
+  display: none !important;
+}
