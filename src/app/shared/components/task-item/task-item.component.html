@@ -1,0 +1,31 @@
+<app-glass
+  [radius]="16"
+  class="task"
+  [class.task--done]="task.done"
+  [style.border-left]="cat && !task.done ? '3px solid ' + cat.color : null"
+>
+  <button
+    type="button"
+    class="check"
+    [style.border-color]="task.done ? 'transparent' : (cat?.color || 'rgba(26,26,46,0.2)')"
+    [style.background]="task.done ? (cat?.color || 'oklch(0.75 0.15 340)') : 'transparent'"
+    (click)="handleToggle($event)"
+    [attr.aria-label]="task.done ? 'Marcar pendiente' : 'Marcar completada'"
+  >
+    @if (task.done) {
+      <app-icon name="check" [size]="12" color="#fff" />
+    }
+  </button>
+
+  <div class="body" (click)="open.emit()">
+    <div class="title">{{ task.title }}</div>
+    <div class="meta">
+      @if (cat) { <span>{{ cat.icon }} {{ cat.name }}</span> }
+      @if (task.due) { <span>· {{ task.due }}</span> }
+    </div>
+  </div>
+
+  @if (task.priority === 'alta' && !task.done) {
+    <span class="priority"></span>
+  }
+</app-glass>

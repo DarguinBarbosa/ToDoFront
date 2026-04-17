@@ -1,0 +1,53 @@
+.task {
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.task--done { opacity: 0.55; }
+
+.check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 14.5px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.task--done .title { text-decoration: line-through; }
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--glass-text-sec);
+}
+
+.priority {
+  width: 4px;
+  height: 20px;
+  border-radius: 2px;
+  background: oklch(0.65 0.22 25);
+  flex-shrink: 0;
+}
