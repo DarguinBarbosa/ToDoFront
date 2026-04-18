@@ -1,0 +1,145 @@
+<ion-content [fullscreen]="true" class="transparent">
+  <div class="screen">
+    <!-- Header -->
+    <div class="header">
+      <div class="avatar">D</div>
+      <app-glass [radius]="999" class="icon-btn" (click)="theme.toggle()">
+        <app-icon [name]="theme.dark() ? 'sun' : 'moon'" [size]="16" />
+      </app-glass>
+    </div>
+
+    <!-- Greeting -->
+    <div class="greeting">
+      <div class="greeting__hello">Buenos días, Darguin</div>
+      <h1 class="greeting__title">
+        Tienes <span class="accent">{{ store.todayCount() }} tareas</span><br />
+        para hoy
+      </h1>
+    </div>
+
+    <!-- Stats -->
+    @if (flags.flags().show_stats_row) {
+      <div class="stats">
+        <app-glass [radius]="16" class="stat">
+          <div class="stat__label" style="color: oklch(0.68 0.16 170)">Hoy</div>
+          <div class="stat__value">{{ store.todayCount() }}</div>
+        </app-glass>
+        <app-glass [radius]="16" class="stat">
+          <div class="stat__label" style="color: oklch(0.72 0.14 250)">Hechas</div>
+          <div class="stat__value">{{ store.doneCount() }}</div>
+        </app-glass>
+        <app-glass [radius]="16" class="stat">
+          <div class="stat__label" style="color: oklch(0.75 0.14 340)">Total</div>
+          <div class="stat__value">{{ store.totalCount() }}</div>
+        </app-glass>
+      </div>
+    }
+
+    <!-- Categories -->
+    <div class="section">
+      <div class="section__head">
+        <div class="section__title">Categorías</div>
+        <a routerLink="/categories" class="section__link">Gestionar</a>
+      </div>
+      <div class="cat-grid">
+        @for (c of categoriesView(); track c.id) {
+          <div
+            class="cat-card"
+            [class.cat-card--active]="c.active"
+            [style.border-color]="c.active ? c.color : null"
+            [style.background]="c.active ? c.color + '22' : null"
+            [style.box-shadow]="c.active ? '0 8px 20px ' + c.color + '33' : null"
+            (click)="toggleFocus(c.id)"
+          >
+            <span class="cat-card__tag" [style.background]="c.color"></span>
+            @if (c.active) {
+              <span class="cat-card__check" [style.background]="c.color">
+                <app-icon name="check" [size]="10" color="#fff" />
+              </span>
+            }
+            <div class="cat-card__icon">{{ c.icon }}</div>
+            <div class="cat-card__name">{{ c.name }}</div>
+            <div class="cat-card__pending">{{ c.pending }} pendientes</div>
+            <div class="cat-card__bar">
+              <div class="cat-card__bar-fill"
+                [style.width.%]="c.progress * 100"
+                [style.background]="c.color"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="filter-bar">
+      <div class="filter-bar__label">
+        <app-icon name="search" [size]="14" /> Filtrar por categoría
+      </div>
+      <div class="filter-bar__chips">
+        <button class="chip" [class.chip--active]="!focusedCat()" (click)="clearFocus()">
+          Todas
+        </button>
+        @for (c of store.categories(); track c.id) {
+          <button class="chip"
+            [class.chip--active]="focusedCat() === c.id"
+            [style.border-color]="focusedCat() === c.id ? c.color : null"
+            [style.background]="focusedCat() === c.id ? c.color : null"
+            [style.color]="focusedCat() === c.id ? '#fff' : null"
+            (click)="toggleFocus(c.id)">
+            {{ c.icon }} {{ c.name }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Task list -->
+    <div class="section section--tasks">
+      <div class="section__title-row">
+        <div class="section__title section__title--sm">
+          {{ focusedCat() ? categoryOf(focusedCat())?.name : 'Para hoy' }}
+        </div>
+        @if (focusedCat(); as fid) {
+          <button class="filter-chip"
+            [style.background]="categoryOf(fid)?.color"
+            (click)="clearFocus()">
+            <span>{{ categoryOf(fid)?.icon }} {{ categoryOf(fid)?.name }}</span>
+            <app-icon name="close" [size]="12" color="#fff" />
+          </button>
+        }
+      </div>
+
+      @if (pending().length === 0 && completed().length === 0) {
+        <app-glass [radius]="24" class="empty">
+          <div class="empty__emoji">🌟</div>
+          <div class="empty__text">Nada pendiente</div>
+        </app-glass>
+      }
+
+      <div class="list">
+        @for (t of pending(); track t.id) {
+          <app-task-item [task]="t" [cat]="categoryOf(t.category)"
+            (toggle)="store.toggleTask(t.id)"
+            (open)="openTask(t.id)" />
+        }
+      </div>
+
+      @if (completed().length > 0) {
+        <div class="list-label">Completadas · {{ completed().length }}</div>
+        <div class="list">
+          @for (t of completed(); track t.id) {
+            <app-task-item [task]="t" [cat]="categoryOf(t.category)"
+              (toggle)="store.toggleTask(t.id)"
+              (open)="openTask(t.id)" />
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="bottom-nav">
+    <app-glass [radius]="999" [blur]="30" class="fab" (click)="openCreate()">
+      <app-icon name="plus" [size]="24" color="#fff" />
+    </app-glass>
+  </div>
+</ion-content>

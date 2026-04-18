@@ -1,0 +1,79 @@
+<ion-content [fullscreen]="true" class="transparent">
+  @if (task(); as t) {
+    <div class="screen">
+      <div class="header">
+        <app-glass [radius]="999" class="icon-btn" (click)="back()">
+          <app-icon name="chevronLeft" [size]="18" />
+        </app-glass>
+        <div class="header__actions">
+          <app-glass [radius]="999" class="icon-btn" (click)="editing() ? saveEdit() : startEdit()">
+            <app-icon [name]="editing() ? 'check' : 'edit'" [size]="15" />
+          </app-glass>
+          <app-glass [radius]="999" class="icon-btn" (click)="remove()">
+            <app-icon name="trash" [size]="16" color="oklch(0.65 0.22 25)" />
+          </app-glass>
+        </div>
+      </div>
+
+      <div class="body">
+        <app-glass
+          [radius]="26"
+          class="hero"
+          [style.background]="cat()
+            ? 'linear-gradient(135deg, ' + cat()!.color + '30, rgba(255,255,255,0.4))'
+            : null"
+        >
+          @if (cat(); as c) {
+            <span class="pill" [style.background]="c.color">
+              {{ c.icon }} {{ c.name }}
+            </span>
+          }
+          @if (editing()) {
+            <input class="hero__edit" type="text" autofocus
+              [ngModel]="draft()" (ngModelChange)="draft.set($event)"
+              (keyup.enter)="saveEdit()" (keyup.escape)="cancelEdit()" />
+          } @else {
+            <h1 class="hero__title" [class.hero__title--done]="t.done">{{ t.title }}</h1>
+          }
+          @if (t.note) { <div class="hero__note">{{ t.note }}</div> }
+        </app-glass>
+
+        <app-glass [radius]="20" class="toggle-row" (click)="toggle()">
+          <div class="toggle-circle"
+            [style.border-color]="t.done ? 'transparent' : (cat()?.color || 'rgba(26,26,46,0.25)')"
+            [style.background]="t.done ? (cat()?.color || 'oklch(0.75 0.15 340)') : 'transparent'">
+            @if (t.done) { <app-icon name="check" [size]="16" color="#fff" /> }
+          </div>
+          <div class="toggle-label">
+            {{ t.done ? 'Completada' : 'Marcar como completada' }}
+          </div>
+        </app-glass>
+
+        <div class="meta-grid">
+          <app-glass [radius]="16" class="meta">
+            <div class="meta__label">Fecha</div>
+            <div class="meta__value">{{ t.due || '—' }}</div>
+          </app-glass>
+          <app-glass [radius]="16" class="meta">
+            <div class="meta__label">Prioridad</div>
+            <div class="meta__value cap">{{ t.priority || 'Media' }}</div>
+          </app-glass>
+        </div>
+
+        <app-glass [radius]="18" class="activity">
+          <div class="activity__label">Actividad</div>
+          <div class="activity__item">
+            <span class="dot" [style.background]="cat()?.color || 'oklch(0.75 0.15 340)'"></span>
+            <span class="activity__text">Creada</span>
+            <span class="activity__time">Hace un momento</span>
+          </div>
+        </app-glass>
+      </div>
+    </div>
+  } @else {
+    <div class="empty">
+      <div>Tarea no encontrada</div>
+      <button (click)="back()" class="back-btn">Volver</button>
+    </div>
+  }
+</ion-content>
