@@ -1,0 +1,61 @@
+<ion-content [fullscreen]="true" class="transparent">
+  <div class="screen">
+    <div class="header">
+      <app-glass [radius]="999" class="icon-btn" (click)="back()">
+        <app-icon name="chevronLeft" [size]="18" />
+      </app-glass>
+      <div class="header__title">Categorías</div>
+      <span class="header__spacer"></span>
+    </div>
+
+    <div class="body">
+      <div class="list">
+        @for (c of store.categories(); track c.id) {
+          <app-glass [radius]="16" class="row" (click)="edit(c.id)">
+            <span class="row__swatch" [style.background]="c.color"></span>
+            <span class="row__icon">{{ c.icon }}</span>
+            <span class="row__name">{{ c.name }}</span>
+            <button class="row__del" (click)="remove(c.id); $event.stopPropagation()">
+              <app-icon name="trash" [size]="15" color="oklch(0.65 0.22 25)" />
+            </button>
+          </app-glass>
+        }
+      </div>
+
+      @if (flags.flags().allow_category_create) {
+        <div class="editor-label">
+          {{ editingId() ? 'Editar categoría' : 'Nueva categoría' }}
+        </div>
+        <app-glass [radius]="20" class="editor">
+          <input class="editor__name" type="text" placeholder="Nombre"
+            [ngModel]="name()" (ngModelChange)="name.set($event)" />
+
+          <div class="editor__label">Icono</div>
+          <input class="editor__icon" type="text" maxlength="2"
+            [ngModel]="icon()" (ngModelChange)="icon.set($event)" />
+
+          <div class="editor__label">Color</div>
+          <div class="swatches">
+            @for (p of palette; track p) {
+              <button type="button" class="swatch"
+                [class.swatch--active]="color() === p"
+                [style.background]="p"
+                (click)="color.set(p)"></button>
+            }
+          </div>
+
+          <div class="editor__actions">
+            @if (editingId()) {
+              <button class="btn btn--ghost" (click)="startNew()">Cancelar</button>
+            }
+            <button class="btn btn--primary"
+              [disabled]="!canSave()"
+              (click)="save()">
+              {{ editingId() ? 'Guardar' : 'Crear' }}
+            </button>
+          </div>
+        </app-glass>
+      }
+    </div>
+  </div>
+</ion-content>
