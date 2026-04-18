@@ -1,7 +1,7 @@
 /**
- * Firebase web config. These values are public client identifiers (see Firebase docs);
- * security is enforced by Remote Config rules and App Check, not secrecy.
- * Leave apiKey blank to run fully offline — FeatureFlagService falls back to safe defaults.
+ * Firebase web config. Completa estos valores con tu proyecto de Firebase.
+ * Déjalos vacíos para correr la app offline — FeatureFlagService usa valores
+ * por defecto seguros si no hay configuración.
  */
 export const environment = {
   production: false,
@@ -11,6 +11,6 @@ export const environment = {
     projectId: '',
     storageBucket: '',
     messagingSenderId: '',
-    appId: '1:',
+    appId: '',
   },
 };
